@@ -314,7 +314,7 @@ int main(int argc, const char *argv[]) {
 				 break;
 			case 'n':
 				 if(optarg) {
-					 path = strdup(optarg);
+					 name = strdup(optarg);
 					 fprintf(stderr, "-n %s\n", name);
 				 } else {
 					 fprintf(stderr, "-n not paramter\n");

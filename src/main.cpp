@@ -246,11 +246,8 @@ int main(int argc, char *argv[]) {
 	int opt = 0;
 	int option_index = 0;
 	int iret = -1;
-	//int i_len = 0;
 	int app_last_start_time = time(nullptr);
 
-	//char s_tmp[1024];
-	//char *cmd_options = "p:n:vh";
 	char *path, *name;
 
 	static struct option long_options[] = {
@@ -329,7 +326,7 @@ int main(int argc, char *argv[]) {
 							   "--path, -p\n program path\n"
 							   "--name, -n\n program name\n"
 							   "--version, -v\n version information\n"
-							   "--help, -h\n help \n", argv[0]);
+							   "--help, -h\n print help information \n", argv[0]);
 				 return 0;
 			default:
 				 fprintf(stderr, "getopt returned character code 0 %02x\n", opt);

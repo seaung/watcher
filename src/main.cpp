@@ -242,15 +242,15 @@ int is_running(const char *pid_file) {
 	return OK;
 }
 
-int main(int argc, const char *argv[]) {
+int main(int argc, char *argv[]) {
 	int opt = 0;
 	int option_index = 0;
 	int iret = -1;
-	int i_len = 0;
+	//int i_len = 0;
 	int app_last_start_time = time(nullptr);
 
-	char s_tmp[1024];
-	char *cmd_options = "p:n:vh";
+	//char s_tmp[1024];
+	//char *cmd_options = "p:n:vh";
 	char *path, *name;
 
 	static struct option long_options[] = {
@@ -262,7 +262,7 @@ int main(int argc, const char *argv[]) {
 	};
 
 	while(1) {
-		opt = getopt_long(argc, argv, cmd_options, long_options, &option_index);
+		opt = getopt_long(argc, argv, "p:n:vh", long_options, &option_index);
 		if(opt == EOF)
 			break;
 

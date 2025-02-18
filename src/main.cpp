@@ -20,10 +20,11 @@
 using namespace std;
 
 // 日志等级
+// 日志等级定义
 enum {
-	DEBUG = 0,
-	ERROR,
-	NONE
+    DEBUG = 0,  // 调试级别
+    ERROR,      // 错误级别
+    NONE        // 无日志
 };
 
 // 定义日志等级名称
@@ -63,6 +64,13 @@ static const char *s_level_name[NONE + 1] = {
 	} while (0)
 
 mutex mutx;
+
+/**
+ * @file main.cpp
+ * @brief 进程监控守护程序
+ * @details 该程序用于监控指定进程的运行状态，当目标进程不存在时自动重启
+ * @version 1.0.0
+ */
 
 // 获取父目录路径
 const char *get_parent_dir() {
@@ -251,13 +259,14 @@ int main(int argc, char *argv[]) {
 	char *path, *name;
 
 	static struct option long_options[] = {
-		{"path", 1, 0, '-'},
-		{"name", 1, 0, '-'},
-		{"version", 0, 0, '-'},
-		{"help", 0, 0, '-'},
+		{"path", 1, 0, '-'},     // 程序路径
+		{"name", 1, 0, '-'},     // 程序名称
+		{"version", 0, 0, '-'},  // 版本信息
+		{"help", 0, 0, '-'},     // 帮助信息
 		{"0, 0, 0, 0"}
 	};
 
+	// 解析命令行参数
 	while(1) {
 		opt = getopt_long(argc, argv, "p:n:vh", long_options, &option_index);
 		if(opt == EOF)
@@ -340,28 +349,32 @@ int main(int argc, char *argv[]) {
 		printf("\n");
 	}
 
+	// 检查必要参数
 	if(NULL == path && NULL == name) {
 		fprintf(stderr, "please input --path and --name\n");
 		return -1;
 	}
 
-
+	// 启动守护进程
 	start_deamon();
 
+	// 检查程序是否已运行
 	if(is_running(LOCK_FILE_PATH)) {
 		Error("the program had started!\n");
 		fprintf(stdout, "the program had started!\n this watcher program shutdow!\n");
 		return NOT_OK;
 	}
 
+	// 主监控循环
 	while(1) {
+		// 检查目标进程是否需要重启
 		if(time(nullptr) - app_last_start_time > VAL_TM && (iret = get_watcher_processer(name))) {
 			Error("%s don't found!\n");
-			system(path);
+			system(path);  // 重启目标进程
 			app_last_start_time = time(nullptr);
 		}
 
-		sleep(1);
+		sleep(1);  // 休眠1秒
 	}
 
 	return 0;
